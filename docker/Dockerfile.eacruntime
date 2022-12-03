@@ -1,16 +1,5 @@
 # Build the eacruntime-controller manager binary
-FROM golang:1.17.8 as builder
-
-WORKDIR /go/src/github.com/fluid-cloudnative/fluid
-COPY . .
-
-RUN make eacruntime-controller-build && \
-    cp bin/eacruntime-controller /go/bin/eacruntime-controller
-
-# Debug
-RUN go install github.com/go-delve/delve/cmd/dlv@v1.8.2
-
-FROM alpine:3.16
+FROM --platform=linux/amd64 alpine:3.10
 RUN apk add --update curl tzdata iproute2 bash libc6-compat vim &&  \
  	rm -rf /var/cache/apk/* && \
  	cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \
@@ -28,8 +17,7 @@ RUN curl -o /usr/local/bin/kubectl https://storage.googleapis.com/kubernetes-rel
 
 ADD charts/ /charts
 
-COPY --from=builder /go/bin/eacruntime-controller /usr/local/bin/eacruntime-controller
-COPY --from=builder /go/bin/dlv /usr/local/bin/dlv
+COPY bin/eacruntime-controller /usr/local/bin/eacruntime-controller
 RUN chmod -R u+x /usr/local/bin/
 
 CMD ["eacruntime-controller", "start"]

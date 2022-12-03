@@ -3,7 +3,7 @@ CRD_OPTIONS ?= "crd"
 
 # The Image URL to use in docker build and push
 # IMG_REPO ?= registry.aliyuncs.com/fluid
-IMG_REPO ?= fluidcloudnative
+IMG_REPO ?= registry.cn-zhangjiakou.aliyuncs.com/nasteam
 DATASET_CONTROLLER_IMG ?= ${IMG_REPO}/dataset-controller
 APPLICATION_CONTROLLER_IMG ?= ${IMG_REPO}/application-controller
 ALLUXIORUNTIME_CONTROLLER_IMG ?= ${IMG_REPO}/alluxioruntime-controller
@@ -214,8 +214,8 @@ docker-build-juicefsruntime-controller: generate gen-openapi fmt vet juicefsrunt
 docker-build-thinruntime-controller: generate gen-openapi fmt vet thinruntime-controller-build
 	docker build --no-cache --build-arg TARGETARCH=${ARCH} . -f docker/Dockerfile.thinruntime -t ${THINRUNTIME_CONTROLLER_IMG}:${GIT_VERSION}
 
-docker-build-eacruntime-controller: generate gen-openapi fmt vet
-	docker build --no-cache --build-arg TARGETARCH=${ARCH} . -f docker/Dockerfile.eacruntime -t ${EACRUNTIME_CONTROLLER_IMG}:${GIT_VERSION}
+docker-build-eacruntime-controller: generate gen-openapi fmt vet eacruntime-controller-build
+	docker build --build-arg TARGETARCH=${ARCH} . -f docker/Dockerfile.eacruntime -t ${EACRUNTIME_CONTROLLER_IMG}:${GIT_VERSION}
 
 docker-build-csi: generate fmt vet
 	docker build --no-cache . -f docker/Dockerfile.csi -t ${CSI_IMG}:${GIT_VERSION}

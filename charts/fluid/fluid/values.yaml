@@ -88,7 +88,7 @@ runtime:
       image: fluidcloudnative/thinruntime-controller:v0.9.0-18ea1f9
   eac:
     replicas: 1
-    enabled: false
+    enabled: true
     controller:
       image:
       imagePullPolicy: Always
